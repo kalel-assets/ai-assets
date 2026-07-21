@@ -1,0 +1,87 @@
+[
+  {
+    "id": "kalel-work",
+    "kind": "skill",
+    "source": "org",
+    "name": "Code Agent Instruction Guide",
+    "description": "Claude·Gemini·Codex 공통 작업 규칙과 재사용 가능한 slash command 템플릿 모음",
+    "owner": "kalelkim",
+    "repo": "https://github.com/kalelkim/kalel-work",
+    "tags": ["agent", "commands", "workflow", "docs"],
+    "install": "git clone https://github.com/kalelkim/kalel-work.git",
+    "status": "stable",
+    "updated": "2026-04-07"
+  },
+  {
+    "id": "karpathy-skills",
+    "kind": "skill",
+    "source": "external",
+    "name": "Andrej Karpathy Skills",
+    "description": "LLM 코딩 실수를 줄이는 행동 가이드라인 스킬 모음",
+    "owner": "multica-ai",
+    "repo": "https://github.com/multica-ai/andrej-karpathy-skills",
+    "tags": ["coding", "guidelines", "review"],
+    "status": "stable",
+    "updated": "2026-06-03"
+  },
+  {
+    "id": "understand-anything",
+    "kind": "skill",
+    "source": "external",
+    "name": "Understand Anything",
+    "description": "코드베이스를 분석해 인터랙티브 지식 그래프로 시각화",
+    "owner": "Egonex-AI",
+    "repo": "https://github.com/Egonex-AI/Understand-Anything",
+    "tags": ["codebase", "knowledge-graph", "onboarding"],
+    "status": "stable",
+    "updated": "2026-05-31"
+  },
+  {
+    "id": "sap-skills",
+    "kind": "skill",
+    "source": "external",
+    "name": "SAP Skills (ARC-1)",
+    "description": "ABAP·RAP·CDS·Fiori 개발을 GUI 없이 다루는 SAP 스킬 세트",
+    "owner": "secondsky",
+    "repo": "https://github.com/secondsky/sap-skills",
+    "tags": ["sap", "abap", "rap", "fiori"],
+    "status": "stable",
+    "updated": "2026-05-20"
+  },
+  {
+    "id": "codex",
+    "kind": "plugin",
+    "source": "external",
+    "name": "Codex",
+    "description": "막힌 작업을 Codex 서브에이전트에게 위임해 2차 진단·수정",
+    "owner": "openai",
+    "repo": "https://github.com/openai/codex-plugin-cc",
+    "tags": ["agent", "debugging", "handoff"],
+    "status": "stable",
+    "updated": "2026-05-16"
+  },
+  {
+    "id": "claude-md-management",
+    "kind": "plugin",
+    "source": "external",
+    "name": "CLAUDE.md Management",
+    "description": "저장소의 CLAUDE.md를 감사하고 품질을 개선",
+    "owner": "anthropics",
+    "repo": "https://github.com/anthropics/claude-plugins-official",
+    "tags": ["docs", "memory", "audit"],
+    "status": "stable",
+    "updated": "2026-05-16"
+  },
+  {
+    "id": "context7",
+    "kind": "mcp",
+    "source": "external",
+    "name": "Context7",
+    "description": "라이브러리·프레임워크 최신 공식 문서를 실시간으로 조회",
+    "owner": "upstash",
+    "repo": "https://github.com/upstash/context7",
+    "tags": ["docs", "reference", "http"],
+    "status": "stable",
+    "updated": "2026-07-21"
+  }
+]
