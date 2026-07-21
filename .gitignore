@@ -27,3 +27,6 @@ docs
 *.njsproj
 *.sln
 *.sw?
+
+# Cygwin/MSYS crash dumps
+*.stackdump
