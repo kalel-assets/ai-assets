@@ -29,6 +29,22 @@ for (const [i, a] of assets.entries()) {
     if (!/^[a-z0-9-]+$/.test(a.id)) errors.push(`${at}: id must be lowercase kebab-case`)
   }
 
+  // A highlight that does not occur in the description renders as nothing at all,
+  // so a typo here is invisible in the UI — catch it at build time instead.
+  if (a.highlights !== undefined) {
+    if (!Array.isArray(a.highlights)) {
+      errors.push(`${at}: highlights must be an array`)
+    } else {
+      for (const h of a.highlights) {
+        if (typeof h !== 'string' || h.trim() === '') {
+          errors.push(`${at}: highlights entries must be non-empty strings`)
+        } else if (!(a.description ?? '').toLowerCase().includes(h.toLowerCase())) {
+          errors.push(`${at}: highlight "${h}" does not occur in the description`)
+        }
+      }
+    }
+  }
+
   // The rule from the "external is external" decision: we link third-party code,
   // we never hand out a command that installs it.
   if (a.source === 'external' && a.install) {

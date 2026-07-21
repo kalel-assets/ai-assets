@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Build output for branch-based Pages (npm run build:docs). This repo deploys via
+# Actions, so it stays untracked here. An internal mirror that cannot run Actions
+# must DELETE this line — there, committing docs/ is the whole deployment.
+docs
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

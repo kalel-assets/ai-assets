@@ -30,11 +30,8 @@ jobs:
       # break the site. Fail here rather than shipping a broken card.
       - run: npm run validate
       - run: npm run lint
+      # vite.config.ts uses a relative base, so the build needs no per-path config.
       - run: npm run build
-        env:
-          # Project repo is served at https://kalel-assets.github.io/ai-assets/.
-          # Drop this if the site ever moves to an org-level *.github.io repo.
-          BASE_PATH: /ai-assets/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

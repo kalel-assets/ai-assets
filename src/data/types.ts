@@ -20,13 +20,21 @@ export interface Asset {
   name: string
   /** One line. Shown on the card; keep it under ~100 chars. */
   description: string
+  /**
+   * Substrings of `description` to render bold. Plain terms, not regex, not markup —
+   * the description stays readable as prose. Each term must actually occur in the
+   * description; `npm run validate` fails on ones that do not, since a typo here is
+   * silently invisible in the UI.
+   */
+  highlights?: string[]
   /** GitHub owner — an org member's handle, or the upstream author for external assets. */
   owner: string
-  /** Full repo URL. */
+  /** Full repo URL. Used as a link target only — never rendered as visible text. */
   repo: string
   tags: string[]
   /**
    * Copy-pasteable install command. Set this ONLY when `source === 'org'`.
+   * Surfaced through a copy button, not printed on the card.
    * See INSTALL_HINTS for the per-kind shape.
    */
   install?: string

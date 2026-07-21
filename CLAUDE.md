@@ -13,11 +13,12 @@ host their own asset repos under one roof.
 ## Commands
 
 ```bash
-npm run dev       # Vite dev server
-npm run build     # tsc -b && vite build → dist/
-npm run validate  # check src/data/assets.json invariants (see below) — run before every commit
-npm run lint      # oxlint (not ESLint — config lives in .oxlintrc.json)
-npm run preview   # serve the built dist/
+npm run dev         # Vite dev server
+npm run build       # tsc -b && vite build → dist/   (Actions-based deploy)
+npm run build:docs  # same build → docs/             (branch-based deploy, see below)
+npm run validate    # check src/data/assets.json invariants — run before every commit
+npm run lint        # oxlint (not ESLint — config lives in .oxlintrc.json)
+npm run preview     # serve the built dist/
 ```
 
 No test runner is installed. If you add one, prefer Vitest — it reuses `vite.config.ts` as-is.
@@ -62,21 +63,47 @@ Consequences for anyone editing the catalog:
   inbound links.
 
 `npm run validate` enforces the mechanical half of this (required fields, kebab-case unique ids,
-`external` without `install`, `org` with `install`, bare GitHub URL, date format). It cannot check
-whether a URL still resolves — that stays a human step during review.
+`external` without `install`, `org` with `install`, bare GitHub URL, date format, and every
+`highlights` term actually occurring in its description). It cannot check whether a URL still
+resolves — that stays a human step during review.
+
+### Repo URLs are never rendered as text
+
+Cards expose `repo` and `install` only through buttons — a "GitHub" link and, for org assets, a
+"설치 명령 복사" button that writes the command to the clipboard. Nothing prints the URL. This keeps
+card heights uniform regardless of URL length, and it is why `install` needs no truncation styling.
+If you add a field that could contain a URL, surface it the same way.
+
+Descriptions bold their `highlights` terms via `<strong class="kw">`. Terms are literal strings and
+are regex-escaped before matching, and sorted longest-first so a term that prefixes another does not
+swallow it.
 
 ## Deployment
 
-Static build → GitHub Pages via `.github/workflows/deploy.yml`, published at
-<https://kalel-assets.github.io/ai-assets/>. `vite.config.ts` reads `base` from the `BASE_PATH` env
-var (default `/`); the workflow sets `BASE_PATH=/ai-assets/` because a project repo is served under
-`/<repo>/`. An org-level `kalel-assets.github.io` repo would need no override. Getting this wrong is
-the usual cause of a blank page with 404s on every asset.
+`vite.config.ts` sets `base: './'`. Relative asset paths mean the same build works at `/`, at
+`/ai-assets/`, or under any path an internal Git server mounts it at — there is no per-deployment
+base to configure and no `BASE_PATH` env var. This holds only while the site is a single page; adding
+client-side routing would bring a real base path back.
 
-**Reproducing the production build on Windows: do not use Git Bash.** MSYS2 rewrites any env value
-starting with `/` into a Windows path, so `BASE_PATH=/ai-assets/ npm run build` silently emits
-`src="/Program Files/Git/ai-assets/..."`. Use PowerShell (`$env:BASE_PATH='/ai-assets/'`) or prefix
-with `MSYS_NO_PATHCONV=1`. The Ubuntu runner is unaffected.
+Two deployment modes are supported, because the internal and external hosts have different constraints:
+
+**External (this repo) — Actions.** `.github/workflows/deploy.yml` runs validate + lint + build on
+push to `main` and publishes `dist/` to Pages at <https://kalel-assets.github.io/ai-assets/>.
+
+**Internal mirror — branch-based, no Actions.** Internal GitHub requires an admin to approve Actions,
+so the mirror serves static files straight from `main` with Pages source set to `/docs`:
+
+```bash
+npm run validate && npm run lint && npm run build:docs
+git add docs && git commit -m "Rebuild catalog" && git push
+```
+
+`docs/` is gitignored **in this repo** because Actions publishes here. **An internal mirror must
+delete the `docs` line from `.gitignore`** — there, committing `docs/` *is* the deployment, and an
+inherited ignore rule would make every push appear to succeed while the site never changes.
+
+`public/.nojekyll` is copied into every build output. Branch-based Pages runs Jekyll, which would
+otherwise skip any path starting with an underscore.
 
 ## Conventions
 

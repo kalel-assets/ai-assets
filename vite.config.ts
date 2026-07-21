@@ -4,7 +4,9 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // GitHub Pages serves a project repo under /<repo>/. The deploy workflow sets
-  // BASE_PATH; local dev and an org-level *.github.io repo both want '/'.
-  base: process.env.BASE_PATH ?? '/',
+  // Relative base: the page works at '/', at '/ai-assets/', and at whatever path an
+  // internal Git server mounts it under — no per-deployment configuration. Safe only
+  // because this is a single page with no client-side routing; nested routes would
+  // need a real base again.
+  base: './',
 })

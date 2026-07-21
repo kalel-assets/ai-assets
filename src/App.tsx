@@ -5,6 +5,7 @@ import type { Asset, AssetKind } from './data/types'
 const assets = rawAssets as Asset[]
 
 const ORG_URL = 'https://github.com/kalel-assets'
+const CATALOG_URL = 'https://github.com/kalel-assets/ai-assets'
 
 const KIND_LABEL: Record<AssetKind, string> = {
   skill: 'SKILL',
@@ -29,27 +30,55 @@ function KindIcon({ kind }: { kind: AssetKind }) {
   )
 }
 
-function InstallCommand({ command }: { command: string }) {
-  const [copied, setCopied] = useState(false)
+/** Bolds each `terms` occurrence inside `text`. Terms are literal strings, so they are
+ *  escaped before going into the split pattern — a tag like "C++" must not become regex. */
+function Highlighted({ text, terms }: { text: string; terms?: string[] }) {
+  if (!terms || terms.length === 0) return <>{text}</>
+
+  const pattern = terms
+    .map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    // Longest first: otherwise a term that is a prefix of another swallows the match.
+    .sort((a, b) => b.length - a.length)
+    .join('|')
+
+  const parts = text.split(new RegExp(`(${pattern})`, 'gi'))
+  const isTerm = (s: string) => terms.some((t) => t.toLowerCase() === s.toLowerCase())
+
+  return (
+    <>
+      {parts.map((part, i) =>
+        isTerm(part) ? (
+          <strong className="kw" key={i}>
+            {part}
+          </strong>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  )
+}
+
+/** The command itself is never printed — the card exposes it only through the clipboard,
+ *  so long repo URLs stay out of the layout. */
+function InstallButton({ command }: { command: string }) {
+  const [state, setState] = useState<'idle' | 'ok' | 'fail'>('idle')
 
   async function copy() {
     try {
       await navigator.clipboard.writeText(command)
+      setState('ok')
     } catch {
-      // Clipboard API needs a secure context; the command stays selectable either way.
-      return
+      // Clipboard needs a secure context; say so rather than appearing to do nothing.
+      setState('fail')
     }
-    setCopied(true)
-    window.setTimeout(() => setCopied(false), 1500)
+    window.setTimeout(() => setState('idle'), 1600)
   }
 
   return (
-    <div className="install">
-      <pre className="install__cmd">{command}</pre>
-      <button type="button" className="install__copy" onClick={copy}>
-        {copied ? '복사됨' : '복사'}
-      </button>
-    </div>
+    <button type="button" className="btn btn--primary" onClick={copy}>
+      {state === 'ok' ? '복사됨' : state === 'fail' ? '복사 실패' : '설치 명령 복사'}
+    </button>
   )
 }
 
@@ -73,7 +102,9 @@ function AssetCard({ asset }: { asset: Asset }) {
         {asset.owner}
         {asset.license ? ` · ${asset.license}` : ''}
       </p>
-      <p className="card__desc">{asset.description}</p>
+      <p className="card__desc">
+        <Highlighted text={asset.description} terms={asset.highlights} />
+      </p>
 
       <div className="tags">
         {asset.tags.map((t) => (
@@ -86,9 +117,9 @@ function AssetCard({ asset }: { asset: Asset }) {
       <div className="card__foot">
         {/* Only org-owned assets ship a runnable command. External cards link out and
             stop there — see the org/external rule in CLAUDE.md. */}
-        {asset.source === 'org' && asset.install ? <InstallCommand command={asset.install} /> : null}
-        <a className="card__link" href={asset.repo} target="_blank" rel="noopener noreferrer">
-          GitHub에서 보기 →
+        {asset.source === 'org' && asset.install ? <InstallButton command={asset.install} /> : null}
+        <a className="btn btn--ghost" href={asset.repo} target="_blank" rel="noopener noreferrer">
+          GitHub
         </a>
       </div>
     </article>
@@ -231,7 +262,7 @@ export default function App() {
             <a href={ORG_URL} target="_blank" rel="noopener noreferrer">
               GitHub Organization
             </a>
-            <a href="https://github.com/kalel-assets/ai-assets" target="_blank" rel="noopener noreferrer">
+            <a href={CATALOG_URL} target="_blank" rel="noopener noreferrer">
               자산 등록하기
             </a>
           </div>
