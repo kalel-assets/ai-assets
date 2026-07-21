@@ -1,0 +1,50 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# A superseded run has nothing useful left to publish, but let an in-flight
+# deploy finish rather than leaving Pages half-updated.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Catalog data is hand-edited, so a malformed entry is the likeliest way to
+      # break the site. Fail here rather than shipping a broken card.
+      - run: npm run validate
+      - run: npm run lint
+      - run: npm run build
+        env:
+          # Project repo is served at https://kalel-assets.github.io/ai-assets/.
+          # Drop this if the site ever moves to an org-level *.github.io repo.
+          BASE_PATH: /ai-assets/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

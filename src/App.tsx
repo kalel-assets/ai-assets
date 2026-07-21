@@ -1,122 +1,242 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useMemo, useState } from 'react'
+import rawAssets from './data/assets.json'
+import type { Asset, AssetKind } from './data/types'
 
-function App() {
-  const [count, setCount] = useState(0)
+const assets = rawAssets as Asset[]
 
+const ORG_URL = 'https://github.com/kalel-assets'
+
+const KIND_LABEL: Record<AssetKind, string> = {
+  skill: 'SKILL',
+  mcp: 'MCP',
+  plugin: 'PLUGIN',
+}
+
+const KINDS: AssetKind[] = ['skill', 'mcp', 'plugin']
+
+type Filter = AssetKind | 'all'
+
+function KindIcon({ kind }: { kind: AssetKind }) {
+  const paths: Record<AssetKind, string> = {
+    skill: 'M12 3l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.8 6.2 20.9l1.1-6.5L2.6 9.8l6.5-.9L12 3z',
+    mcp: 'M5 7h14M5 12h14M5 17h9M3 7h.01M3 12h.01M3 17h.01',
+    plugin: 'M10 3v4H7a2 2 0 00-2 2v3h3a2 2 0 110 4H5v3a2 2 0 002 2h3v-4a2 2 0 114 0v4h3a2 2 0 002-2v-3h-3a2 2 0 110-4h3V9a2 2 0 00-2-2h-3V3h-4z',
+  }
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d={paths[kind]} />
+    </svg>
   )
 }
 
-export default App
+function InstallCommand({ command }: { command: string }) {
+  const [copied, setCopied] = useState(false)
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(command)
+    } catch {
+      // Clipboard API needs a secure context; the command stays selectable either way.
+      return
+    }
+    setCopied(true)
+    window.setTimeout(() => setCopied(false), 1500)
+  }
+
+  return (
+    <div className="install">
+      <pre className="install__cmd">{command}</pre>
+      <button type="button" className="install__copy" onClick={copy}>
+        {copied ? '복사됨' : '복사'}
+      </button>
+    </div>
+  )
+}
+
+function AssetCard({ asset }: { asset: Asset }) {
+  return (
+    <article className="card" id={asset.id}>
+      <div className="card__top">
+        <div className="card__icon">
+          <KindIcon kind={asset.kind} />
+        </div>
+        <div className="badges">
+          <span className="badge badge--kind">{KIND_LABEL[asset.kind]}</span>
+          <span className={`badge badge--${asset.source}`}>
+            {asset.source === 'org' ? '내 자산' : '외부'}
+          </span>
+        </div>
+      </div>
+
+      <h3 className="card__title">{asset.name}</h3>
+      <p className="card__owner">
+        {asset.owner}
+        {asset.license ? ` · ${asset.license}` : ''}
+      </p>
+      <p className="card__desc">{asset.description}</p>
+
+      <div className="tags">
+        {asset.tags.map((t) => (
+          <span className="tag" key={t}>
+            {t}
+          </span>
+        ))}
+      </div>
+
+      <div className="card__foot">
+        {/* Only org-owned assets ship a runnable command. External cards link out and
+            stop there — see the org/external rule in CLAUDE.md. */}
+        {asset.source === 'org' && asset.install ? <InstallCommand command={asset.install} /> : null}
+        <a className="card__link" href={asset.repo} target="_blank" rel="noopener noreferrer">
+          GitHub에서 보기 →
+        </a>
+      </div>
+    </article>
+  )
+}
+
+export default function App() {
+  const [filter, setFilter] = useState<Filter>('all')
+  const [query, setQuery] = useState('')
+
+  const counts = useMemo(
+    () => ({
+      skill: assets.filter((a) => a.kind === 'skill').length,
+      mcp: assets.filter((a) => a.kind === 'mcp').length,
+      plugin: assets.filter((a) => a.kind === 'plugin').length,
+    }),
+    [],
+  )
+
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return assets.filter((a) => {
+      if (filter !== 'all' && a.kind !== filter) return false
+      if (!q) return true
+      return (
+        a.name.toLowerCase().includes(q) ||
+        a.description.toLowerCase().includes(q) ||
+        a.owner.toLowerCase().includes(q) ||
+        a.tags.some((t) => t.toLowerCase().includes(q))
+      )
+    })
+  }, [filter, query])
+
+  const mine = visible.filter((a) => a.source === 'org')
+  const external = visible.filter((a) => a.source === 'external')
+
+  return (
+    <div className="page">
+      <header className="header">
+        <div className="shell header__inner">
+          <span className="brand">AI Assets</span>
+          <nav className="nav">
+            <button type="button" className="nav__item" aria-current={filter === 'all'} onClick={() => setFilter('all')}>
+              전체
+            </button>
+            {KINDS.map((k) => (
+              <button key={k} type="button" className="nav__item" aria-current={filter === k} onClick={() => setFilter(k)}>
+                {KIND_LABEL[k]}
+              </button>
+            ))}
+          </nav>
+          <a className="header__link" href={ORG_URL} target="_blank" rel="noopener noreferrer">
+            kalel-assets
+          </a>
+        </div>
+      </header>
+
+      <main className="shell main">
+        <section className="hero">
+          <div className="hero__inner">
+            <h1 className="hero__title">나만의 AI Assets</h1>
+            <p className="hero__lede">
+              팀이 쓰고 만드는 SKILL · MCP · PLUGIN을 한곳에서 찾고 바로 설치하세요.
+            </p>
+
+            <div className="search">
+              <svg className="search__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M20 20l-3.5-3.5" />
+              </svg>
+              <input
+                className="search__input"
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="자산, 태그, 만든 사람으로 검색…"
+                aria-label="자산 검색"
+              />
+            </div>
+
+            <div className="stats">
+              {KINDS.map((k) => (
+                <button
+                  key={k}
+                  type="button"
+                  className="stat"
+                  aria-current={filter === k}
+                  onClick={() => setFilter(filter === k ? 'all' : k)}
+                >
+                  <span className="stat__value">{counts[k]}</span>
+                  <span className="stat__label">{KIND_LABEL[k]}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {visible.length === 0 ? (
+          <p className="empty">조건에 맞는 자산이 없습니다.</p>
+        ) : (
+          <>
+            {mine.length > 0 && (
+              <section className="section">
+                <div className="section__head">
+                  <h2 className="section__title">내 자산</h2>
+                  <span className="section__note">kalel-assets org 및 멤버 소유 · 설치 명령 제공</span>
+                </div>
+                <div className="grid">
+                  {mine.map((a) => (
+                    <AssetCard asset={a} key={a.id} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {external.length > 0 && (
+              <section className="section">
+                <div className="section__head">
+                  <h2 className="section__title">외부 자산</h2>
+                  <span className="section__note">참고용 큐레이션 · 원저장소 링크만 제공</span>
+                </div>
+                <div className="grid">
+                  {external.map((a) => (
+                    <AssetCard asset={a} key={a.id} />
+                  ))}
+                </div>
+              </section>
+            )}
+          </>
+        )}
+      </main>
+
+      <footer className="footer">
+        <div className="shell footer__inner">
+          <div>
+            <div className="footer__brand">AI Assets</div>
+            <div className="footer__meta">kalel-assets · 외부 자산의 저작권은 각 원저작자에게 있습니다.</div>
+          </div>
+          <div className="footer__links">
+            <a href={ORG_URL} target="_blank" rel="noopener noreferrer">
+              GitHub Organization
+            </a>
+            <a href="https://github.com/kalel-assets/ai-assets" target="_blank" rel="noopener noreferrer">
+              자산 등록하기
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}

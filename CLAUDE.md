@@ -67,10 +67,16 @@ whether a URL still resolves — that stays a human step during review.
 
 ## Deployment
 
-Static build → GitHub Pages, via GitHub Actions. `vite.config.ts` reads `base` from the `BASE_PATH`
-env var (default `/`). A project repo is served under `/<repo>/`, so the deploy workflow must set
-`BASE_PATH=/<repo>/`; an org-level `kalel-assets.github.io` repo needs no override. Getting this
-wrong is the usual cause of a blank page with 404s on every asset.
+Static build → GitHub Pages via `.github/workflows/deploy.yml`, published at
+<https://kalel-assets.github.io/ai-assets/>. `vite.config.ts` reads `base` from the `BASE_PATH` env
+var (default `/`); the workflow sets `BASE_PATH=/ai-assets/` because a project repo is served under
+`/<repo>/`. An org-level `kalel-assets.github.io` repo would need no override. Getting this wrong is
+the usual cause of a blank page with 404s on every asset.
+
+**Reproducing the production build on Windows: do not use Git Bash.** MSYS2 rewrites any env value
+starting with `/` into a Windows path, so `BASE_PATH=/ai-assets/ npm run build` silently emits
+`src="/Program Files/Git/ai-assets/..."`. Use PowerShell (`$env:BASE_PATH='/ai-assets/'`) or prefix
+with `MSYS_NO_PATHCONV=1`. The Ubuntu runner is unaffected.
 
 ## Conventions
 
