@@ -24,7 +24,7 @@ function KindIcon({ kind }: { kind: AssetKind }) {
     plugin: 'M10 3v4H7a2 2 0 00-2 2v3h3a2 2 0 110 4H5v3a2 2 0 002 2h3v-4a2 2 0 114 0v4h3a2 2 0 002-2v-3h-3a2 2 0 110-4h3V9a2 2 0 00-2-2h-3V3h-4z',
   }
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d={paths[kind]} />
     </svg>
   )

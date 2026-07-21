@@ -38,27 +38,15 @@
     "owner": "multica-ai",
     "repo": "https://github.com/multica-ai/andrej-karpathy-skills",
     "tags": ["coding", "guidelines", "review"],
+    "license": "MIT",
     "status": "stable",
     "updated": "2026-06-03"
-  },
-  {
-    "id": "understand-anything",
-    "kind": "skill",
-    "source": "external",
-    "name": "Understand Anything",
-    "description": "코드베이스를 분석해 인터랙티브 지식 그래프로 시각화",
-    "highlights": ["지식 그래프"],
-    "owner": "Egonex-AI",
-    "repo": "https://github.com/Egonex-AI/Understand-Anything",
-    "tags": ["codebase", "knowledge-graph", "onboarding"],
-    "status": "stable",
-    "updated": "2026-05-31"
   },
   {
     "id": "sap-skills",
     "kind": "skill",
     "source": "external",
-    "name": "SAP Skills (ARC-1)",
+    "name": "SAP Skills",
     "description": "ABAP·RAP·CDS·Fiori 개발을 GUI 없이 다루는 SAP 스킬 세트",
     "highlights": ["GUI 없이"],
     "owner": "secondsky",
@@ -66,6 +54,34 @@
     "tags": ["sap", "abap", "rap", "fiori"],
     "status": "stable",
     "updated": "2026-05-20"
+  },
+  {
+    "id": "arc-1",
+    "kind": "mcp",
+    "source": "external",
+    "name": "ARC-1",
+    "description": "SAP ABAP 시스템을 ADT REST API로 연결하는 엔터프라이즈 MCP 서버 — 기본값은 읽기 전용",
+    "highlights": ["엔터프라이즈 MCP 서버", "읽기 전용"],
+    "owner": "arc-mcp",
+    "repo": "https://github.com/arc-mcp/arc-1",
+    "tags": ["sap", "abap", "adt", "security"],
+    "license": "MIT",
+    "status": "stable",
+    "updated": "2026-07-20"
+  },
+  {
+    "id": "vibing-steampunk",
+    "kind": "mcp",
+    "source": "external",
+    "name": "Vibing Steampunk",
+    "description": "ABAP·AMDP를 에이전트로 개발하기 위한 ADT to MCP 브리지",
+    "highlights": ["ADT to MCP 브리지"],
+    "owner": "oisee",
+    "repo": "https://github.com/oisee/vibing-steampunk",
+    "tags": ["sap", "abap", "amdp", "bridge"],
+    "license": "MIT",
+    "status": "stable",
+    "updated": "2026-06-15"
   },
   {
     "id": "codex",
@@ -94,16 +110,31 @@
     "updated": "2026-05-16"
   },
   {
-    "id": "context7",
-    "kind": "mcp",
+    "id": "frontend-slides",
+    "kind": "plugin",
     "source": "external",
-    "name": "Context7",
-    "description": "라이브러리·프레임워크 최신 공식 문서를 실시간으로 조회",
-    "highlights": ["최신 공식 문서", "실시간"],
-    "owner": "upstash",
-    "repo": "https://github.com/upstash/context7",
-    "tags": ["docs", "reference", "http"],
+    "name": "Frontend Slides",
+    "description": "코딩 에이전트의 프론트엔드 실력으로 웹 기반 발표 슬라이드를 제작",
+    "highlights": ["웹 기반 발표 슬라이드"],
+    "owner": "zarazhangrui",
+    "repo": "https://github.com/zarazhangrui/frontend-slides",
+    "tags": ["slides", "presentation", "frontend"],
+    "license": "MIT",
     "status": "stable",
-    "updated": "2026-07-21"
+    "updated": "2026-06-23"
+  },
+  {
+    "id": "ponytail",
+    "kind": "plugin",
+    "source": "external",
+    "name": "Ponytail",
+    "description": "에이전트를 가장 게으른 시니어 개발자처럼 사고하게 만드는 플러그인 — 안 쓴 코드가 최고의 코드",
+    "highlights": ["게으른 시니어 개발자", "안 쓴 코드"],
+    "owner": "DietrichGebert",
+    "repo": "https://github.com/DietrichGebert/ponytail",
+    "tags": ["code-quality", "yagni", "review"],
+    "license": "MIT",
+    "status": "stable",
+    "updated": "2026-07-15"
   }
 ]

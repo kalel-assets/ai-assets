@@ -313,7 +313,7 @@ a {
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--gutter);
+  gap: 16px;
 }
 
 @media (min-width: 768px) {
@@ -334,7 +334,7 @@ a {
   background: var(--surface-lowest);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius);
-  padding: var(--stack-md);
+  padding: 16px;
   display: flex;
   flex-direction: column;
   transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
@@ -350,13 +350,13 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--stack-sm);
+  margin-bottom: 10px;
   gap: 8px;
 }
 
 .card__icon {
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius);
   background: var(--surface-gray);
   color: var(--primary);
@@ -374,10 +374,10 @@ a {
 }
 
 .badge {
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 11px;
+  line-height: 14px;
   font-weight: 500;
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: var(--radius);
   white-space: nowrap;
 }
@@ -400,23 +400,23 @@ a {
 }
 
 .card__title {
-  margin: 0 0 4px;
-  font-size: 20px;
-  line-height: 28px;
+  margin: 0 0 2px;
+  font-size: 17px;
+  line-height: 24px;
   font-weight: 700;
   color: var(--text-heading);
 }
 
 .card__owner {
-  margin: 0 0 var(--stack-sm);
-  font-size: 12px;
+  margin: 0 0 8px;
+  font-size: 11px;
   color: var(--outline);
 }
 
 .card__desc {
-  margin: 0 0 var(--stack-md);
-  font-size: 16px;
-  line-height: 24px;
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 20px;
   color: var(--on-surface-variant);
   flex-grow: 1;
 }
@@ -424,18 +424,18 @@ a {
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: var(--stack-sm);
+  gap: 4px;
+  margin-bottom: 10px;
 }
 
 .tag {
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 11px;
+  line-height: 14px;
   color: var(--on-secondary-container);
   background: var(--surface-container-low);
   border: 1px solid var(--outline-variant);
   border-radius: var(--radius);
-  padding: 2px 6px;
+  padding: 2px 5px;
 }
 
 .kw {
@@ -445,21 +445,21 @@ a {
 
 .card__foot {
   border-top: 1px solid var(--border-subtle);
-  padding-top: var(--stack-sm);
+  padding-top: 10px;
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 /* Repo URLs are never printed on a card — they live behind these buttons, so the
    layout stays even no matter how long the underlying URL is. */
 .btn {
   flex: 1;
-  height: 36px;
+  height: 32px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font: inherit;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   border-radius: var(--radius);
   cursor: pointer;
