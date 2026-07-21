@@ -54,8 +54,19 @@ for (const [i, a] of assets.entries()) {
     errors.push(`${at}: org assets need an install command`)
   }
 
-  if (a.repo && !/^https:\/\/github\.com\/[^/]+\/[^/]+$/.test(a.repo)) {
-    errors.push(`${at}: repo must be a bare https://github.com/<owner>/<repo> URL`)
+  // Host is deliberately not pinned to github.com: an internal mirror hosts the same
+  // catalog on its own Git server, and pinning would fail every internal asset.
+  const repoMatch = a.repo ? /^https:\/\/([^/]+)\/([^/]+)\/([^/]+)$/.exec(a.repo) : null
+  if (a.repo && !repoMatch) {
+    errors.push(`${at}: repo must be a bare https://<host>/<owner>/<repo> URL`)
+  } else if (repoMatch && a.owner && repoMatch[2].toLowerCase() !== a.owner.toLowerCase()) {
+    // `owner` is the account that hosts the repo, nothing else. Whether an asset is
+    // ours or third-party is carried by `source` — conflating the two is the usual
+    // mistake when registering an asset.
+    errors.push(
+      `${at}: owner "${a.owner}" does not match the repo URL owner "${repoMatch[2]}" — ` +
+        `owner is the hosting account; use "source" for org vs external`,
+    )
   }
   if (a.updated && !/^\d{4}-\d{2}-\d{2}$/.test(a.updated)) {
     errors.push(`${at}: updated must be YYYY-MM-DD`)

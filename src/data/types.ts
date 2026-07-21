@@ -27,9 +27,17 @@ export interface Asset {
    * silently invisible in the UI.
    */
   highlights?: string[]
-  /** GitHub owner — an org member's handle, or the upstream author for external assets. */
+  /**
+   * The account that hosts the repo — must equal the owner segment of `repo`, and
+   * `npm run validate` enforces that. This is NOT a statement about org membership:
+   * an asset living under a member's personal account is still `source: 'org'`.
+   */
   owner: string
-  /** Full repo URL. Used as a link target only — never rendered as visible text. */
+  /**
+   * Bare `https://<host>/<owner>/<repo>` URL. The host is not pinned to github.com so
+   * an internal mirror can register repos on its own Git server.
+   * Used as a link target only — never rendered as visible text.
+   */
   repo: string
   tags: string[]
   /**
