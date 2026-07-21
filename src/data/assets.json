@@ -14,6 +14,21 @@
     "updated": "2026-04-07"
   },
   {
+    "id": "btp-terraform",
+    "kind": "skill",
+    "source": "org",
+    "name": "SAP BTP Admin Skills",
+    "description": "SAP BTP 계정을 cockpit 대신 CLI로 관리하는 스킬 — IAS 사용자 관리, btp·cf CLI 워크플로",
+    "highlights": ["CLI로 관리", "IAS 사용자 관리"],
+    "owner": "kalelkim",
+    "repo": "https://github.com/kalelkim/btp-terraform",
+    "tags": ["sap", "btp", "cli", "iam"],
+    "install": "git clone https://github.com/kalelkim/btp-terraform.git && cd btp-terraform && .\\link-skills.ps1",
+    "license": "Apache-2.0",
+    "status": "beta",
+    "updated": "2026-07-21"
+  },
+  {
     "id": "karpathy-skills",
     "kind": "skill",
     "source": "external",
