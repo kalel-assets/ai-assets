@@ -1,14 +1,22 @@
 [
   {
     "id": "kalel-work",
-    "kind": "skill",
+    "kind": "etc",
     "source": "org",
     "name": "Code Agent Instruction Guide",
     "description": "Claude·Gemini·Codex 공통 작업 규칙과 재사용 가능한 slash command 템플릿 모음",
-    "highlights": ["작업 규칙", "slash command"],
+    "highlights": [
+      "작업 규칙",
+      "slash command"
+    ],
     "owner": "kalelkim",
-    "repo": "https://github.com/kalelkim/kalel-work",
-    "tags": ["agent", "commands", "workflow", "docs"],
+    "url": "https://github.com/kalelkim/kalel-work",
+    "tags": [
+      "agent",
+      "commands",
+      "workflow",
+      "docs"
+    ],
     "install": "git clone https://github.com/kalelkim/kalel-work.git",
     "status": "stable",
     "updated": "2026-04-07"
@@ -19,10 +27,18 @@
     "source": "org",
     "name": "SAP BTP Admin Skills",
     "description": "SAP BTP 계정을 cockpit 대신 CLI로 관리하는 스킬 — IAS 사용자 관리, btp·cf CLI 워크플로",
-    "highlights": ["CLI로 관리", "IAS 사용자 관리"],
+    "highlights": [
+      "CLI로 관리",
+      "IAS 사용자 관리"
+    ],
     "owner": "kalelkim",
-    "repo": "https://github.com/kalelkim/btp-terraform",
-    "tags": ["sap", "btp", "cli", "iam"],
+    "url": "https://github.com/kalelkim/btp-terraform",
+    "tags": [
+      "sap",
+      "btp",
+      "cli",
+      "iam"
+    ],
     "install": "git clone https://github.com/kalelkim/btp-terraform.git && cd btp-terraform && .\\link-skills.ps1",
     "license": "Apache-2.0",
     "status": "beta",
@@ -34,10 +50,16 @@
     "source": "external",
     "name": "Andrej Karpathy Skills",
     "description": "LLM 코딩 실수를 줄이는 행동 가이드라인 스킬 모음",
-    "highlights": ["행동 가이드라인"],
+    "highlights": [
+      "행동 가이드라인"
+    ],
     "owner": "multica-ai",
-    "repo": "https://github.com/multica-ai/andrej-karpathy-skills",
-    "tags": ["coding", "guidelines", "review"],
+    "url": "https://github.com/multica-ai/andrej-karpathy-skills",
+    "tags": [
+      "coding",
+      "guidelines",
+      "review"
+    ],
     "license": "MIT",
     "status": "stable",
     "updated": "2026-06-03"
@@ -48,10 +70,17 @@
     "source": "external",
     "name": "SAP Skills",
     "description": "ABAP·RAP·CDS·Fiori 개발을 GUI 없이 다루는 SAP 스킬 세트",
-    "highlights": ["GUI 없이"],
+    "highlights": [
+      "GUI 없이"
+    ],
     "owner": "secondsky",
-    "repo": "https://github.com/secondsky/sap-skills",
-    "tags": ["sap", "abap", "rap", "fiori"],
+    "url": "https://github.com/secondsky/sap-skills",
+    "tags": [
+      "sap",
+      "abap",
+      "rap",
+      "fiori"
+    ],
     "status": "stable",
     "updated": "2026-05-20"
   },
@@ -61,10 +90,18 @@
     "source": "external",
     "name": "ARC-1",
     "description": "SAP ABAP 시스템을 ADT REST API로 연결하는 엔터프라이즈 MCP 서버 — 기본값은 읽기 전용",
-    "highlights": ["엔터프라이즈 MCP 서버", "읽기 전용"],
+    "highlights": [
+      "엔터프라이즈 MCP 서버",
+      "읽기 전용"
+    ],
     "owner": "arc-mcp",
-    "repo": "https://github.com/arc-mcp/arc-1",
-    "tags": ["sap", "abap", "adt", "security"],
+    "url": "https://github.com/arc-mcp/arc-1",
+    "tags": [
+      "sap",
+      "abap",
+      "adt",
+      "security"
+    ],
     "license": "MIT",
     "status": "stable",
     "updated": "2026-07-20"
@@ -75,10 +112,17 @@
     "source": "external",
     "name": "Vibing Steampunk",
     "description": "ABAP·AMDP를 에이전트로 개발하기 위한 ADT to MCP 브리지",
-    "highlights": ["ADT to MCP 브리지"],
+    "highlights": [
+      "ADT to MCP 브리지"
+    ],
     "owner": "oisee",
-    "repo": "https://github.com/oisee/vibing-steampunk",
-    "tags": ["sap", "abap", "amdp", "bridge"],
+    "url": "https://github.com/oisee/vibing-steampunk",
+    "tags": [
+      "sap",
+      "abap",
+      "amdp",
+      "bridge"
+    ],
     "license": "MIT",
     "status": "stable",
     "updated": "2026-06-15"
@@ -89,10 +133,16 @@
     "source": "external",
     "name": "Codex",
     "description": "막힌 작업을 Codex 서브에이전트에게 위임해 2차 진단·수정",
-    "highlights": ["서브에이전트에게 위임"],
+    "highlights": [
+      "서브에이전트에게 위임"
+    ],
     "owner": "openai",
-    "repo": "https://github.com/openai/codex-plugin-cc",
-    "tags": ["agent", "debugging", "handoff"],
+    "url": "https://github.com/openai/codex-plugin-cc",
+    "tags": [
+      "agent",
+      "debugging",
+      "handoff"
+    ],
     "status": "stable",
     "updated": "2026-05-16"
   },
@@ -102,10 +152,16 @@
     "source": "external",
     "name": "CLAUDE.md Management",
     "description": "저장소의 CLAUDE.md를 감사하고 품질을 개선",
-    "highlights": ["감사"],
+    "highlights": [
+      "감사"
+    ],
     "owner": "anthropics",
-    "repo": "https://github.com/anthropics/claude-plugins-official",
-    "tags": ["docs", "memory", "audit"],
+    "url": "https://github.com/anthropics/claude-plugins-official",
+    "tags": [
+      "docs",
+      "memory",
+      "audit"
+    ],
     "status": "stable",
     "updated": "2026-05-16"
   },
@@ -115,10 +171,16 @@
     "source": "external",
     "name": "Frontend Slides",
     "description": "코딩 에이전트의 프론트엔드 실력으로 웹 기반 발표 슬라이드를 제작",
-    "highlights": ["웹 기반 발표 슬라이드"],
+    "highlights": [
+      "웹 기반 발표 슬라이드"
+    ],
     "owner": "zarazhangrui",
-    "repo": "https://github.com/zarazhangrui/frontend-slides",
-    "tags": ["slides", "presentation", "frontend"],
+    "url": "https://github.com/zarazhangrui/frontend-slides",
+    "tags": [
+      "slides",
+      "presentation",
+      "frontend"
+    ],
     "license": "MIT",
     "status": "stable",
     "updated": "2026-06-23"
@@ -129,10 +191,17 @@
     "source": "external",
     "name": "Ponytail",
     "description": "에이전트를 가장 게으른 시니어 개발자처럼 사고하게 만드는 플러그인 — 안 쓴 코드가 최고의 코드",
-    "highlights": ["게으른 시니어 개발자", "안 쓴 코드"],
+    "highlights": [
+      "게으른 시니어 개발자",
+      "안 쓴 코드"
+    ],
     "owner": "DietrichGebert",
-    "repo": "https://github.com/DietrichGebert/ponytail",
-    "tags": ["code-quality", "yagni", "review"],
+    "url": "https://github.com/DietrichGebert/ponytail",
+    "tags": [
+      "code-quality",
+      "yagni",
+      "review"
+    ],
     "license": "MIT",
     "status": "stable",
     "updated": "2026-07-15"

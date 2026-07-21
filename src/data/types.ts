@@ -1,14 +1,20 @@
-export type AssetKind = 'skill' | 'mcp' | 'plugin'
+/**
+ * `etc` is the escape hatch: a guide, a document, a bookmark — anything worth sharing
+ * that is not an installable skill/MCP/plugin, and not necessarily a git repo at all.
+ * It is the only kind whose `url` may point anywhere.
+ */
+export type AssetKind = 'skill' | 'mcp' | 'plugin' | 'etc'
 
 export type AssetStatus = 'stable' | 'beta' | 'wip'
 
 /**
  * Who owns the asset — drives how the card renders, not just how it is grouped.
  *
- * - `org`      : owned by kalel-assets or a member. Ships an install command.
- * - `external` : third-party repo we merely curate. Link only, never an install
- *                command — we do not control that code and cannot vouch for what
- *                a later commit puts in it.
+ * - `org`      : owned by kalel-assets or a member. Ships an install command
+ *                (except `etc`, which usually has nothing to install).
+ * - `external` : third-party we merely curate. Link only, never an install command —
+ *                we do not control that code and cannot vouch for what a later commit
+ *                puts in it.
  */
 export type AssetSource = 'org' | 'external'
 
@@ -28,22 +34,27 @@ export interface Asset {
    */
   highlights?: string[]
   /**
-   * The account that hosts the repo — must equal the owner segment of `repo`, and
-   * `npm run validate` enforces that. This is NOT a statement about org membership:
-   * an asset living under a member's personal account is still `source: 'org'`.
+   * The account hosting the repo. Required for skill/mcp/plugin and must equal the
+   * owner segment of `url`; optional for `etc`, where the link may not belong to an
+   * account at all. This is NOT a statement about org membership — an asset under a
+   * member's personal account is still `source: 'org'`.
    */
-  owner: string
+  owner?: string
   /**
-   * Bare `https://<host>/<owner>/<repo>` URL. The host is not pinned to github.com so
-   * an internal mirror can register repos on its own Git server.
-   * Used as a link target only — never rendered as visible text.
+   * Where the asset lives.
+   *
+   * - skill / mcp / plugin: a bare `https://<host>/<owner>/<repo>` URL. The host is
+   *   not pinned to github.com so an internal mirror can register its own Git server.
+   * - etc: any https URL — a doc, a wiki page, a blog post, a repo, whatever.
+   *
+   * Used as a link target only, never rendered as visible text.
    */
-  repo: string
+  url: string
   tags: string[]
   /**
-   * Copy-pasteable install command. Set this ONLY when `source === 'org'`.
-   * Surfaced through a copy button, not printed on the card.
-   * See INSTALL_HINTS for the per-kind shape.
+   * Copy-pasteable install command, surfaced through a copy button rather than printed.
+   * Only for `source: 'org'`; required there except for `etc`, which often has nothing
+   * to install. See INSTALL_HINTS for the per-kind shape.
    */
   install?: string
   /** SPDX id where known. Worth surfacing on external cards so credit is visible. */
@@ -55,9 +66,10 @@ export interface Asset {
 
 /**
  * Canonical install-command shapes per kind. Entries in assets.json should follow
- * these so the copy button produces something that actually runs.
+ * these so the copy button produces something that actually runs. `etc` has no
+ * canonical shape — whatever the thing needs, or nothing at all.
  */
-export const INSTALL_HINTS: Record<AssetKind, string> = {
+export const INSTALL_HINTS: Record<Exclude<AssetKind, 'etc'>, string> = {
   skill: '/plugin marketplace add <owner>/<repo>',
   plugin: '/plugin install <name>@<marketplace>',
   mcp: 'claude mcp add <name> -- <command>',

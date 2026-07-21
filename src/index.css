@@ -238,14 +238,14 @@ a {
 
 .stats {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--stack-sm);
   width: 100%;
 }
 
 @media (min-width: 768px) {
   .stats {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 

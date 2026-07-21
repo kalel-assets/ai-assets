@@ -3,7 +3,9 @@
 // Run: npm run validate    (also runs in CI before deploy)
 import { readFileSync } from 'node:fs'
 
-const KINDS = ['skill', 'mcp', 'plugin']
+const KINDS = ['skill', 'mcp', 'plugin', 'etc']
+// `etc` is the only kind whose url may be an arbitrary link rather than a repo.
+const REPO_KINDS = ['skill', 'mcp', 'plugin']
 const SOURCES = ['org', 'external']
 const STATUSES = ['stable', 'beta', 'wip']
 
@@ -14,8 +16,12 @@ const seen = new Set()
 for (const [i, a] of assets.entries()) {
   const at = `[${i}] ${a.id ?? '(no id)'}`
 
-  for (const f of ['id', 'kind', 'source', 'name', 'description', 'owner', 'repo', 'status', 'updated']) {
+  for (const f of ['id', 'kind', 'source', 'name', 'description', 'url', 'status', 'updated']) {
     if (!a[f]) errors.push(`${at}: missing required field "${f}"`)
+  }
+  // owner identifies the hosting account, which only means something for a repo.
+  if (REPO_KINDS.includes(a.kind) && !a.owner) {
+    errors.push(`${at}: owner is required for kind "${a.kind}"`)
   }
   if (!Array.isArray(a.tags) || a.tags.length === 0) errors.push(`${at}: tags must be a non-empty array`)
 
@@ -50,23 +56,28 @@ for (const [i, a] of assets.entries()) {
   if (a.source === 'external' && a.install) {
     errors.push(`${at}: external assets must NOT carry an install command — link only`)
   }
-  if (a.source === 'org' && !a.install) {
-    errors.push(`${at}: org assets need an install command`)
+  // A guide or a bookmark has nothing to install, so `etc` is exempt.
+  if (a.source === 'org' && a.kind !== 'etc' && !a.install) {
+    errors.push(`${at}: org assets need an install command (except kind "etc")`)
   }
 
-  // Host is deliberately not pinned to github.com: an internal mirror hosts the same
-  // catalog on its own Git server, and pinning would fail every internal asset.
-  const repoMatch = a.repo ? /^https:\/\/([^/]+)\/([^/]+)\/([^/]+)$/.exec(a.repo) : null
-  if (a.repo && !repoMatch) {
-    errors.push(`${at}: repo must be a bare https://<host>/<owner>/<repo> URL`)
-  } else if (repoMatch && a.owner && repoMatch[2].toLowerCase() !== a.owner.toLowerCase()) {
-    // `owner` is the account that hosts the repo, nothing else. Whether an asset is
-    // ours or third-party is carried by `source` — conflating the two is the usual
-    // mistake when registering an asset.
-    errors.push(
-      `${at}: owner "${a.owner}" does not match the repo URL owner "${repoMatch[2]}" — ` +
-        `owner is the hosting account; use "source" for org vs external`,
-    )
+  if (a.url && !/^https:\/\//.test(a.url)) {
+    errors.push(`${at}: url must start with https://`)
+  } else if (REPO_KINDS.includes(a.kind)) {
+    // Host is deliberately not pinned to github.com: an internal mirror hosts the same
+    // catalog on its own Git server, and pinning would fail every internal asset.
+    const repoMatch = a.url ? /^https:\/\/([^/]+)\/([^/]+)\/([^/]+)$/.exec(a.url) : null
+    if (a.url && !repoMatch) {
+      errors.push(`${at}: kind "${a.kind}" needs a bare https://<host>/<owner>/<repo> url`)
+    } else if (repoMatch && a.owner && repoMatch[2].toLowerCase() !== a.owner.toLowerCase()) {
+      // `owner` is the account that hosts the repo, nothing else. Whether an asset is
+      // ours or third-party is carried by `source` — conflating the two is the usual
+      // mistake when registering an asset.
+      errors.push(
+        `${at}: owner "${a.owner}" does not match the url owner "${repoMatch[2]}" — ` +
+          `owner is the hosting account; use "source" for org vs external`,
+      )
+    }
   }
   if (a.updated && !/^\d{4}-\d{2}-\d{2}$/.test(a.updated)) {
     errors.push(`${at}: updated must be YYYY-MM-DD`)
@@ -78,4 +89,9 @@ if (errors.length) {
   for (const e of errors) console.error('  ' + e)
   process.exit(1)
 }
-console.log(`assets.json OK — ${assets.length} assets (${assets.filter(a => a.source === 'org').length} org, ${assets.filter(a => a.source === 'external').length} external)`)
+const byKind = KINDS.map((k) => `${k} ${assets.filter((a) => a.kind === k).length}`).join(', ')
+console.log(
+  `assets.json OK — ${assets.length} assets ` +
+    `(${assets.filter((a) => a.source === 'org').length} org, ` +
+    `${assets.filter((a) => a.source === 'external').length} external | ${byKind})`,
+)

@@ -13,18 +13,46 @@
 ```jsonc
 {
   "id": "my-skill",                                   // 소문자 kebab-case, 전체에서 고유 (딥링크 앵커)
-  "kind": "skill",                                    // skill | mcp | plugin
+  "kind": "skill",                                    // skill | mcp | plugin | etc  ← 아래 설명
   "source": "org",                                    // org | external  ← 아래 설명
   "name": "My Skill",
   "description": "무엇을 해주는지 한 줄로",
   "highlights": ["한 줄로"],                           // (선택) 설명 중 굵게 표시할 문자열
   "owner": "kalelkim",                                // repo를 호스팅하는 계정  ← 아래 설명
-  "repo": "https://github.com/kalelkim/my-skill",     // 끝에 경로 없이 <owner>/<repo>까지만
+  "url": "https://github.com/kalelkim/my-skill",      // 끝에 경로 없이 <owner>/<repo>까지만
   "tags": ["agent", "docs"],
   "install": "/plugin marketplace add kalelkim/my-skill",  // source가 org일 때만
   "license": "MIT",                                   // (선택) 외부 자산이면 표기 권장
   "status": "stable",                                 // stable | beta | wip
   "updated": "2026-07-21"                             // YYYY-MM-DD
+}
+```
+
+### `기타`(`etc`)는 git repo가 아니어도 됩니다
+
+`skill` · `mcp` · `plugin`은 설치해서 쓰는 것들이라 `url`이 `<owner>/<repo>` 형태여야 하고
+`owner`도 필수입니다. 반면 **`etc`는 공유하고 싶은 가이드·문서·북마크**를 위한 칸이라 제약이 없습니다.
+
+| | skill / mcp / plugin | etc |
+|---|---|---|
+| `url` | `https://<host>/<owner>/<repo>` 형태 강제 | **아무 https 주소나** |
+| `owner` | 필수, `url`과 일치해야 함 | 선택 |
+| `install` | `source: org`면 필수 | 선택 (보통 없음) |
+| 버튼 | `GitHub` | github 주소면 `GitHub`, 아니면 `바로가기` |
+
+문서 링크 등록 예시 — repo도, owner도, 설치 명령도 없습니다:
+
+```jsonc
+{
+  "id": "sap-rap-docs",
+  "kind": "etc",
+  "source": "external",
+  "name": "RAP 공식 문서",
+  "description": "SAP 공식 RAP 개발 가이드",
+  "url": "https://help.sap.com/docs/abap-cloud/abap-rap/...",
+  "tags": ["sap", "rap", "docs"],
+  "status": "stable",
+  "updated": "2026-07-21"
 }
 ```
 
@@ -46,17 +74,17 @@ npm run validate
 
 | 필드 | 의미 | 값 |
 |---|---|---|
-| `owner` | repo를 **실제로 호스팅하는 계정** | `repo` URL의 첫 경로와 **반드시 일치** |
+| `owner` | repo를 **실제로 호스팅하는 계정** | `url`의 첫 경로와 **반드시 일치** |
 | `source` | 우리 자산인가, 남의 것을 큐레이션한 것인가 | `org` 또는 `external` |
 
 즉 `owner`는 "누가 org 소속인가"가 아니라 "이 repo가 어느 계정 아래 있는가"입니다.
 
-- repo가 `github.com/kalel-assets/foo` → `owner: "kalel-assets"`, `source: "org"`
-- repo가 `github.com/kalelkim/foo` (멤버 개인 계정) → `owner: "kalelkim"`, `source: "org"`
-- repo가 `github.com/openai/foo` (외부) → `owner: "openai"`, `source: "external"`
+- `github.com/kalel-assets/foo` → `owner: "kalel-assets"`, `source: "org"`
+- `github.com/kalelkim/foo` (멤버 개인 계정) → `owner: "kalelkim"`, `source: "org"`
+- `github.com/openai/foo` (외부) → `owner: "openai"`, `source: "external"`
 
 멤버 개인 계정에 있어도 우리 자산이면 `source`는 `org`입니다. org로 옮길 필요 없습니다.
-`owner`와 `repo` URL이 어긋나면 `npm run validate`가 막습니다.
+`owner`와 `url`이 어긋나면 `npm run validate`가 막습니다.
 
 ### `source`가 카드 모양을 결정합니다
 
@@ -106,5 +134,5 @@ git add docs && git commit -m "Rebuild catalog" && git push
 > 이 repo는 Actions로 배포해서 `docs/`를 무시합니다. 그 규칙이 그대로 복사되면
 > push는 매번 성공하는데 사이트는 영원히 안 바뀝니다.
 
-사내 Git 호스트 주소(`https://git.company.com/...`)도 `repo` 필드에 그대로 쓸 수 있습니다.
+사내 Git 호스트 주소(`https://git.company.com/...`)도 `url` 필드에 그대로 쓸 수 있습니다.
 검증기는 호스트를 `github.com`으로 고정하지 않습니다.

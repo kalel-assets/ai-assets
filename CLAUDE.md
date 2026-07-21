@@ -26,7 +26,7 @@ No test runner is installed. If you add one, prefer Vitest — it reuses `vite.c
 ## Architecture
 
 **`src/data/assets.json` is the single source of truth for the entire catalog.** It is a flat array
-of every asset regardless of kind; `kind` (`'skill' | 'mcp' | 'plugin'`) is the discriminator that
+of every asset regardless of kind; `kind` (`'skill' | 'mcp' | 'plugin' | 'etc'`) is the discriminator that
 drives filtering, grouping, and the dashboard counts. There is no per-kind file and no backend —
 adding an asset means appending one object to that array. `src/data/types.ts` defines the `Asset`
 shape and `INSTALL_HINTS`, the canonical install-command template per kind.
@@ -42,8 +42,8 @@ and `.claude-plugin/marketplace.json`; keep field names stable so that swap stay
 
 | `source`   | meaning                              | card shows                        |
 |------------|--------------------------------------|-----------------------------------|
-| `org`      | owned by kalel-assets or a member    | install command + repo link       |
-| `external` | third-party repo we merely curate    | **repo link only, never install** |
+| `org`      | owned by kalel-assets or a member    | install command + link            |
+| `external` | third-party we merely curate         | **link only, never install**      |
 
 Linking a public repo needs no permission. But an install command on a third-party card is different
 in kind — it recommends executing code we do not control, under org branding that implies we vetted
@@ -57,7 +57,7 @@ install command starts pointing at unvetted code.
 Consequences for anyone editing the catalog:
 - Never register a **private** repo. Visitors get a 404, and the repo name alone can leak an
   unannounced project or a client.
-- **Verify every `repo` URL resolves before committing** (`gh api repos/<owner>/<repo>` prints the
+- **Verify every `url` resolves before committing** (`gh api repos/<owner>/<repo>` prints the
   canonical name, which is how the two transfers above surfaced).
 - `id` is the unique slug across all kinds and doubles as the deep-link anchor — changing one breaks
   inbound links.
@@ -69,7 +69,7 @@ resolves — that stays a human step during review.
 
 ### Repo URLs are never rendered as text
 
-Cards expose `repo` and `install` only through buttons — a "GitHub" link and, for org assets, a
+Cards expose `url` and `install` only through buttons — a "GitHub" link and, for org assets, a
 "설치 명령 복사" button that writes the command to the clipboard. Nothing prints the URL. This keeps
 card heights uniform regardless of URL length, and it is why `install` needs no truncation styling.
 If you add a field that could contain a URL, surface it the same way.
