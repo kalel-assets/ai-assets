@@ -57,7 +57,7 @@
   },
   {
     "id": "arc-1",
-    "kind": "mcp",
+    "kind": "plugin",
     "source": "external",
     "name": "ARC-1",
     "description": "SAP ABAP 시스템을 ADT REST API로 연결하는 엔터프라이즈 MCP 서버 — 기본값은 읽기 전용",
