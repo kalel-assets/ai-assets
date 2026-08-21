@@ -64,7 +64,11 @@ export async function searchGitHubRepositories(
 }
 
 /** Converts a recommendation into the catalog's link-only external asset shape. */
-export function toExternalAsset(repository: GitHubRepository, kind: AssetKind): Asset {
+export function toExternalAsset(
+  repository: GitHubRepository,
+  kind: AssetKind,
+  registered: string,
+): Asset {
   const license = repository.license?.spdx_id
 
   return {
@@ -78,13 +82,16 @@ export function toExternalAsset(repository: GitHubRepository, kind: AssetKind): 
     tags: repository.topics.length > 0 ? repository.topics.slice(0, 5) : ['github'],
     ...(license && license !== 'NOASSERTION' ? { license } : {}),
     status: 'stable',
+    registered,
     updated: repository.pushed_at.slice(0, 10),
   }
 }
 
-function isSavedAsset(value: unknown): value is Asset {
+type SavedAsset = Omit<Asset, 'registered'> & { registered?: string }
+
+function isSavedAsset(value: unknown): value is SavedAsset {
   if (!value || typeof value !== 'object') return false
-  const asset = value as Partial<Asset>
+  const asset = value as Partial<SavedAsset>
   return (
     typeof asset.id === 'string' &&
     /^github-\d+$/.test(asset.id) &&
@@ -102,6 +109,8 @@ function isSavedAsset(value: unknown): value is Asset {
       (Array.isArray(asset.highlights) &&
         asset.highlights.every((highlight) => typeof highlight === 'string'))) &&
     asset.status === 'stable' &&
+    (asset.registered === undefined ||
+      (typeof asset.registered === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(asset.registered))) &&
     typeof asset.updated === 'string' &&
     /^\d{4}-\d{2}-\d{2}$/.test(asset.updated) &&
     asset.install === undefined
@@ -112,7 +121,11 @@ function isSavedAsset(value: unknown): value is Asset {
 export function loadSavedAssets(storage: StorageLike): Asset[] {
   try {
     const parsed: unknown = JSON.parse(storage.getItem(STORAGE_KEY) ?? '[]')
-    return Array.isArray(parsed) ? parsed.filter(isSavedAsset) : []
+    return Array.isArray(parsed)
+      ? parsed
+          .filter(isSavedAsset)
+          .map((asset) => ({ ...asset, registered: asset.registered ?? asset.updated }))
+      : []
   } catch {
     return []
   }

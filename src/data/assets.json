@@ -19,6 +19,7 @@
     ],
     "install": "git clone https://github.com/kalelkim/kalel-work.git",
     "status": "stable",
+    "registered": "2026-07-21",
     "updated": "2026-04-07"
   },
   {
@@ -42,6 +43,7 @@
     "install": "git clone https://github.com/kalelkim/btp-terraform.git && cd btp-terraform && .\\link-skills.ps1",
     "license": "Apache-2.0",
     "status": "beta",
+    "registered": "2026-07-21",
     "updated": "2026-07-21"
   },
   {
@@ -62,6 +64,7 @@
     ],
     "license": "MIT",
     "status": "stable",
+    "registered": "2026-07-21",
     "updated": "2026-06-03"
   },
   {
@@ -82,6 +85,7 @@
       "fiori"
     ],
     "status": "stable",
+    "registered": "2026-07-21",
     "updated": "2026-05-20"
   },
   {
@@ -104,6 +108,7 @@
     ],
     "license": "MIT",
     "status": "stable",
+    "registered": "2026-07-21",
     "updated": "2026-07-20"
   },
   {
@@ -125,6 +130,7 @@
     ],
     "license": "MIT",
     "status": "stable",
+    "registered": "2026-07-21",
     "updated": "2026-06-15"
   },
   {
@@ -144,6 +150,7 @@
       "handoff"
     ],
     "status": "stable",
+    "registered": "2026-07-21",
     "updated": "2026-05-16"
   },
   {
@@ -163,6 +170,7 @@
       "audit"
     ],
     "status": "stable",
+    "registered": "2026-07-21",
     "updated": "2026-05-16"
   },
   {
@@ -183,6 +191,7 @@
     ],
     "license": "MIT",
     "status": "stable",
+    "registered": "2026-07-21",
     "updated": "2026-06-23"
   },
   {
@@ -204,6 +213,7 @@
     ],
     "license": "MIT",
     "status": "stable",
+    "registered": "2026-07-21",
     "updated": "2026-07-15"
   }
 ]

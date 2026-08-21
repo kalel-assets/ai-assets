@@ -15,6 +15,9 @@
 `src/data/assets.json`도 수정하지 않습니다. 팀 공용 카탈로그에 영구 등록하려면 아래 절차대로
 `assets.json`을 수정해 PR을 생성하세요. 추천 저장소는 항상 `source: "external"`이며 설치 명령을 제공하지 않습니다.
 
+자산 목록의 `최근 변경`은 카탈로그 등록일인 `registered`와 저장소의 의미 있는 최근 변경일인
+`updated` 중 더 최근 날짜를 표시합니다. 새 자산을 등록할 때에는 두 날짜를 모두 `YYYY-MM-DD`로 기록하세요.
+
 ## 자산 등록하기
 
 ### 1. `src/data/assets.json`에 항목 추가
@@ -33,7 +36,8 @@
   "install": "/plugin marketplace add kalelkim/my-skill",  // source가 org일 때만
   "license": "MIT",                                   // (선택) 외부 자산이면 표기 권장
   "status": "stable",                                 // stable | beta | wip
-  "updated": "2026-07-21"                             // YYYY-MM-DD
+  "registered": "2026-07-21",                         // 카탈로그 최초 등록일, YYYY-MM-DD
+  "updated": "2026-07-21"                             // 저장소의 의미 있는 최근 변경일, YYYY-MM-DD
 }
 ```
 
@@ -61,6 +65,7 @@
   "url": "https://help.sap.com/docs/abap-cloud/abap-rap/...",
   "tags": ["sap", "rap", "docs"],
   "status": "stable",
+  "registered": "2026-07-21",
   "updated": "2026-07-21"
 }
 ```

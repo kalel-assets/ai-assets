@@ -16,7 +16,7 @@ const seen = new Set()
 for (const [i, a] of assets.entries()) {
   const at = `[${i}] ${a.id ?? '(no id)'}`
 
-  for (const f of ['id', 'kind', 'source', 'name', 'description', 'url', 'status', 'updated']) {
+  for (const f of ['id', 'kind', 'source', 'name', 'description', 'url', 'status', 'registered', 'updated']) {
     if (!a[f]) errors.push(`${at}: missing required field "${f}"`)
   }
   // owner identifies the hosting account, which only means something for a repo.
@@ -81,6 +81,9 @@ for (const [i, a] of assets.entries()) {
   }
   if (a.updated && !/^\d{4}-\d{2}-\d{2}$/.test(a.updated)) {
     errors.push(`${at}: updated must be YYYY-MM-DD`)
+  }
+  if (a.registered && !/^\d{4}-\d{2}-\d{2}$/.test(a.registered)) {
+    errors.push(`${at}: registered must be YYYY-MM-DD`)
   }
 }
 

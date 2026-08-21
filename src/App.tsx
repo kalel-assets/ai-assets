@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 import rawAssets from './data/assets.json'
 import type { Asset, AssetKind } from './data/types'
+import { latestAssetDate, localIsoDate } from './date'
 import {
   loadSavedAssets,
   saveAssets,
@@ -85,6 +86,16 @@ function Highlighted({ text, terms }: { text: string; terms?: string[] }) {
   )
 }
 
+/** Displays the latest catalog-visible activity date with machine-readable semantics. */
+function AssetDate({ asset }: { asset: Asset }) {
+  const date = latestAssetDate(asset)
+  return (
+    <time className="asset-date" dateTime={date}>
+      최근 변경 {date}
+    </time>
+  )
+}
+
 /** The command itself is never printed — the card exposes it only through the clipboard,
  *  so long repo URLs stay out of the layout. */
 function InstallButton({ command }: { command: string }) {
@@ -127,6 +138,7 @@ function AssetCard({ asset }: { asset: Asset }) {
       <p className="card__owner">
         {[asset.owner, asset.license].filter(Boolean).join(' · ') || ' '}
       </p>
+      <AssetDate asset={asset} />
       <p className="card__desc">
         <Highlighted text={asset.description} terms={asset.highlights} />
       </p>
@@ -175,6 +187,7 @@ function ExternalAssetRow({
           <p className="asset-row__owner">
             {[asset.owner, asset.license].filter(Boolean).join(' · ') || ' '}
           </p>
+          <AssetDate asset={asset} />
         </div>
       </div>
 
@@ -352,7 +365,11 @@ export default function App() {
 
   function addRecommendation(repository: GitHubRepository) {
     if (catalogUrls.has(repository.html_url.toLowerCase())) return
-    const asset = toExternalAsset(repository, trendKinds[repository.id] ?? 'etc')
+    const asset = toExternalAsset(
+      repository,
+      trendKinds[repository.id] ?? 'etc',
+      localIsoDate(),
+    )
     if (persistSavedAssets([...savedAssets, asset])) {
       setNotice(`${repository.full_name}을(를) 참고 목록에 추가했습니다.`)
     }

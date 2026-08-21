@@ -60,6 +60,8 @@ export interface Asset {
   /** SPDX id where known. Worth surfacing on external cards so credit is visible. */
   license?: string
   status: AssetStatus
+  /** ISO date (YYYY-MM-DD) when this asset was first added to the catalog. */
+  registered: string
   /** ISO date (YYYY-MM-DD) of last meaningful change. Drives the "recently updated" list. */
   updated: string
 }

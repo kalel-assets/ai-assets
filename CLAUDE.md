@@ -21,7 +21,7 @@ npm run lint        # oxlint (not ESLint — config lives in .oxlintrc.json)
 npm run preview     # serve the built dist/
 ```
 
-No test runner is installed. If you add one, prefer Vitest — it reuses `vite.config.ts` as-is.
+Tests use Node's built-in test runner, so no separate test-runner dependency is installed.
 
 ## Architecture
 
@@ -30,6 +30,10 @@ of every asset regardless of kind; `kind` (`'skill' | 'mcp' | 'plugin' | 'etc'`)
 drives filtering, grouping, and the dashboard counts. There is no per-kind file and no backend —
 adding an asset means appending one object to that array. `src/data/types.ts` defines the `Asset`
 shape and `INSTALL_HINTS`, the canonical install-command template per kind.
+
+Every asset records `registered` (the date it first entered this catalog) and `updated` (the
+upstream asset's last meaningful change). The UI shows the later value as `최근 변경`, so a newly
+registered older repository still appears as recently changed. Both values use `YYYY-MM-DD`.
 
 Catalog data is **maintained by hand**, deliberately — it is not scraped from the org. Registering an
 asset is a PR that edits `assets.json`. If the asset count outgrows manual upkeep, the schema is
@@ -41,6 +45,7 @@ repository search only after a visitor asks, converts a selected result to a lin
 asset, and saves it in that browser's `localStorage`. It never writes `assets.json`, never adds an
 install command, and never embeds a GitHub token in the client. `src/github.ts` owns the API boundary,
 mapping, and storage validation; its tests use Node's built-in test runner via `npm test`.
+Legacy browser entries without `registered` are restored with `updated` as their registration date.
 
 ### Why this is not a `.claude-plugin/marketplace.json`
 

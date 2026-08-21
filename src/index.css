@@ -631,6 +631,13 @@ a {
   font-size: 11px;
 }
 
+.asset-date {
+  display: block;
+  margin-top: 2px;
+  color: var(--on-surface-variant);
+  font-size: 11px;
+}
+
 .asset-row__content {
   min-width: 0;
 }
@@ -811,9 +818,13 @@ a {
 }
 
 .card__owner {
-  margin: 0 0 8px;
+  margin: 0;
   font-size: 11px;
   color: var(--outline);
+}
+
+.card .asset-date {
+  margin-bottom: 8px;
 }
 
 .card__desc {
