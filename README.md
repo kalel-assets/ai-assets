@@ -6,6 +6,13 @@
 카탈로그 전체는 `src/data/assets.json` 파일 하나입니다. 자산 등록은 이 배열에 객체를 하나 추가하는 PR입니다.
 백엔드도 없고, org를 자동으로 스캔하지도 않습니다.
 
+## Changelog
+
+### 2026-08-21
+
+- [`b0d1025`](https://github.com/kalel-assets/ai-assets/commit/b0d1025ac30dfe64612476e8b0fdeddc4e7a1f48): 자산의 등록일과 저장소 수정일 중 최신 날짜를 목록에 `최근 변경`으로 표시했습니다.
+- [`db76fc8`](https://github.com/kalel-assets/ai-assets/commit/db76fc83bff4a68319eeb8cfec5c331b8ba0a33d): 외부 참고 자산을 list UI로 변경하고, GitHub 인기 저장소를 찾아 개인 참고 목록에 추가하는 `GIT TREND` 기능을 도입했습니다.
+
 ## GIT TREND와 개인 참고 목록
 
 화면의 `GIT TREND`를 열면 GitHub 공개 저장소를 최근 30일 생성·STAR 순 또는 전체 STAR 순으로
